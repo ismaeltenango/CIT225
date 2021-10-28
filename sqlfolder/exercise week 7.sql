@@ -44,12 +44,20 @@ GROUP BY Letter;
 
 -- PROBLEM 6
 -- Edit your last query to find the longest and shortest film lengths for titles beginning with each letter.
-SELECT SUBSTR(title, 1, 1) AS Letter, COUNT(title) AS number_of_films,CHAR_LENGTH(title) AS title_Length, title
+SELECT SUBSTR(title, 1, 1) AS Letter, MAX(LENGTH) AS LONGEST, MIN(LENGTH) AS SHORTEST
 FROM film
-GROUP BY Letter
-HAVING title_length > title_length - 1;
+GROUP BY Letter;
 
 -- PROBLEM 7
 -- Create a query that groups by both category name and movie rating. 
 -- Use the ROLLUP utility to also create summary rows for each category name regardless of rating. 
 -- Sort your results by category name, then reverse rating order.
+
+SELECT c.name AS "category", rating, COUNT(*)
+FROM category c
+	JOIN film_category fc 
+		on fc.category_id = c.category_id
+	JOIN film f
+		ON f.film_id = fc.film_id
+GROUP BY category, rating WITH ROLLUP
+ORDER BY category, rating DESC;
